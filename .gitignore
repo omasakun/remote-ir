@@ -1,0 +1,6 @@
+# auto generated
+.embuild/
+target/
+
+# macos-specific files
+.DS_Store

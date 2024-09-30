@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+    paths:
+      - "**"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: esp-rs/xtensa-toolchain@v1.5
+        with:
+          default: true
+          buildtargets: esp32
+          ldproxy: true
+      - name: Enable Rust cache
+        uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --release
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries
+          path: |
+            target/xtensa-esp32-espidf/release/remote-ir
+            target/xtensa-esp32-espidf/release/*.bin
